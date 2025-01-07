@@ -9,7 +9,7 @@ const initialFormData = {
     tags: []
 };
 
-const availableTags = ["dolci", "homemade", "semplice", "snack", "barbabietola", "sano", "creativo", "tradizionale"];
+// const availableTags = ["dolci", "homemade", "semplice", "snack", "barbabietola", "sano", "creativo", "tradizionale"];
 
 const apiUrl = "http://localhost:3000";
 
@@ -29,7 +29,7 @@ function AppPosts() {
     }
 
     // Set PostsList
-    useEffect(() => { getPosts }, [])
+    useEffect(() => getPosts, [])
 
     // Submit Function
     const handleSubmit = (event) => {
@@ -46,25 +46,28 @@ function AppPosts() {
     }
 
     // Multiple Checkboxes
-    const [selectedChecks, setSelectedChecks] = useState([]);
-    const handleMultipleCheckbox = (event) => {
-        const value = event.target.value;
-        const isChecked = event.target.checked;
+    // const [selectedChecks, setSelectedChecks] = useState([]);
+    // const handleMultipleCheckbox = (event) => {
+    //     const value = event.target.value;
+    //     const isChecked = event.target.checked;
 
-        // Calcolo il nuovo array di selectedChecks
-        const newValue = isChecked ? [...selectedChecks, value] : selectedChecks.filter((curValue) => curValue !== value);
+    //     // Calcolo il nuovo array di selectedChecks
+    //     const updatedChecks = isChecked ? [...selectedChecks, value] : selectedChecks.filter((curValue) => curValue !== value);
 
-        // Aggiorna lo stato di selectedChecks
-        setSelectedChecks(newValue);
+    //     // Aggiorna lo stato di selectedChecks
+    //     setSelectedChecks(updatedChecks);
 
-        return newValue
-    }
+    //     // Aggiorna formData
+    //     setFormData({
+    //         ...formData,
+    //         tags: updatedChecks,
+    //     });
+    // }
 
     // InputChange Function
     const handleChange = (event) => {
         const keyToChange = event.target.name;
-        let newValue;
-        (event.target.type === "checkbox") ? handleMultipleCheckbox : (newValue = event.target.value)
+        const newValue = event.target.value;
         const newData = {
             ...formData,
             [keyToChange]: newValue
@@ -102,15 +105,15 @@ function AppPosts() {
                             <textarea name="content" className='form-control' value={formData.content} onChange={handleChange} id="content" rows="5"></textarea>
                         </div>
                         {/* Tags CheckBox */}
-                        <div className="col-12 mt-4">
+                        {/* <div className="col-12 mt-4">
                             <p className='fw-medium'>Tags:</p>
                             <div className='d-flex justify-content-between'>
                                 {availableTags.map((curTag, index) => <div key={index} className="form-check form-check-inline">
-                                    <input type="checkbox" name="tags" checked={selectedChecks.includes(curTag)} onChange={handleChange} className='form-check-input me-2' id={'ckeck' + curTag} value={curTag} />
+                                    <input type="checkbox" name="tags" checked={selectedChecks.includes(curTag)} onChange={handleMultipleCheckbox} className='form-check-input me-2' id={'ckeck' + curTag} value={curTag} />
                                     <label htmlFor={'ckeck' + curTag} className='form-check-label'>{curTag}</label>
                                 </div>)}
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     {/* Form Button */}
                     <div className="col-12">
@@ -126,13 +129,13 @@ function AppPosts() {
                     {postsList.length !== 0 ? postsList.map((curPost, index) =>
                         <div key={index} className="col-4 mb-3">
                             <div className="card">
-                                <img src={curPost.img} alt="Placeholder image" />
+                                <img src={`${apiUrl}/${curPost.img}`} alt="Placeholder image" />
                                 <div className="card-body">
                                     <h6 className='card-title'><strong>{curPost.title}</strong></h6>
                                     <p className='card-text'>{curPost.content}</p>
-                                    <div>
+                                    {/* <div>
                                         {curPost.tags.map((curTag, index) => <span key={index} className='badge text-bg-dark me-2 mb-4'>{curTag}</span>)}
-                                    </div>
+                                    </div> */}
                                     <button onClick={() => handleDelete(curPost.id)} className='btn btn-outline-danger'>Delete</button>
                                 </div>
                             </div>
