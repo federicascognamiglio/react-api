@@ -78,8 +78,10 @@ function AppPosts() {
 
     // Delete Function
     const handleDelete = (idToDelete) => {
-        const filteredList = postsList.filter(curArticle => curArticle.id !== idToDelete)
-        setPostsList(filteredList);
+        axios.delete(`${apiUrl}/posts/${idToDelete}`).then((resp) => {
+            const filteredList = postsList.filter(curArticle => curArticle.id !== idToDelete)
+            setPostsList(filteredList);
+        })
     }
 
     return (
