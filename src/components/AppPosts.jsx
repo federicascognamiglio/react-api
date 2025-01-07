@@ -9,7 +9,7 @@ const initialFormData = {
     tags: []
 };
 
-// const availableTags = ["dolci", "homemade", "semplice", "snack", "barbabietola", "sano", "creativo", "tradizionale"];
+const availableTags = ["dolci", "homemade", "semplice", "snack", "barbabietola", "sano", "creativo", "tradizionale"];
 
 const apiUrl = "http://localhost:3000";
 
@@ -43,23 +43,26 @@ function AppPosts() {
     }
 
     // Multiple Checkboxes
-    // const [selectedChecks, setSelectedChecks] = useState([]);
-    // const handleMultipleCheckbox = (event) => {
-    //     const value = event.target.value;
-    //     const isChecked = event.target.checked;
+    const [selectedChecks, setSelectedChecks] = useState([]);
+    const handleMultipleCheckbox = (event) => {
+        const value = event.target.value;
+        const isChecked = event.target.checked;
 
-    //     // Calcolo il nuovo array di selectedChecks
-    //     const updatedChecks = isChecked ? [...selectedChecks, value] : selectedChecks.filter((curValue) => curValue !== value);
+        // Calcolo il nuovo array di selectedChecks
+        const updatedChecks = isChecked ? [...selectedChecks, value] : selectedChecks.filter((curValue) => curValue !== value);
 
-    //     // Aggiorna lo stato di selectedChecks
-    //     setSelectedChecks(updatedChecks);
+        // Aggiorna lo stato di selectedChecks
+        setSelectedChecks(updatedChecks);
 
-    //     // Aggiorna formData
-    //     setFormData({
-    //         ...formData,
-    //         tags: updatedChecks,
-    //     });
-    // }
+        // Aggiorna formData
+        setFormData({
+            ...formData,
+            tags: updatedChecks,
+        });
+
+        console.log(updatedChecks);
+        
+    }
 
     // InputChange Function
     const handleChange = (event) => {
@@ -104,7 +107,7 @@ function AppPosts() {
                             <textarea name="content" className='form-control' value={formData.content} onChange={handleChange} id="content" rows="5"></textarea>
                         </div>
                         {/* Tags CheckBox */}
-                        {/* <div className="col-12 mt-4">
+                        <div className="col-12 mt-4">
                             <p className='fw-medium'>Tags:</p>
                             <div className='d-flex justify-content-between'>
                                 {availableTags.map((curTag, index) => <div key={index} className="form-check form-check-inline">
@@ -112,7 +115,7 @@ function AppPosts() {
                                     <label htmlFor={'ckeck' + curTag} className='form-check-label'>{curTag}</label>
                                 </div>)}
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                     {/* Form Button */}
                     <div className="col-12">
@@ -131,10 +134,10 @@ function AppPosts() {
                                 <img src={`${apiUrl}/${curPost.img}`} alt="Placeholder image" />
                                 <div className="card-body">
                                     <h6 className='card-title'><strong>{curPost.title}</strong></h6>
-                                    <p className='card-text'>{curPost.content}</p>
-                                    {/* <div>
+                                    <p className='card-text'>{curPost.content.slice(0, 80) + "..."}</p>
+                                    <div>
                                         {curPost.tags.map((curTag, index) => <span key={index} className='badge text-bg-dark me-2 mb-4'>{curTag}</span>)}
-                                    </div> */}
+                                    </div>
                                     <button onClick={() => handleDelete(curPost.id)} className='btn btn-outline-danger'>Delete</button>
                                 </div>
                             </div>
