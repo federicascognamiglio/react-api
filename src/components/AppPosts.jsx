@@ -36,10 +36,7 @@ function AppPosts() {
         event.preventDefault()
 
         axios.post(`${apiUrl}/posts`, formData).then((resp) => {
-            const newPostsList = [
-                ...postsList,
-                resp.data
-            ];
+            const newPostsList = resp.data;
             setPostsList(newPostsList);
             setFormData(initialFormData)
         })
