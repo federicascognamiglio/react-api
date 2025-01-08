@@ -13,7 +13,7 @@ const initialFormData = {
   tags: []
 };
 
-const availableTags = ["dolci", "homemade", "semplice", "snack", "barbabietola", "sano", "creativo", "tradizionale"];
+// const availableTags = ["dolci", "homemade", "semplice", "snack", "barbabietola", "sano", "creativo", "tradizionale"];
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function App() {
@@ -22,18 +22,37 @@ function App() {
   const [postsList, setPostsList] = useState([]);
   // Valori per form
   const [formData, setFormData] = useState(initialFormData);
+  // Tags
+  const [tagsList, setTagsList] = useState([])
   // Check Selezionati
   const [selectedChecks, setSelectedChecks] = useState([]);
-  
+  // Filter 
+  const [filter, setFilter] = useState("all")
+
   // USE EFFECTS
-  // Get PostsList
-  useEffect(() => getPosts, [])
+  // Show Posts
+  useEffect(() => getPosts(), [filter])
+  // Show Tags
+  useEffect(() => getTags(), [])
 
   // FUNCTIONS
   // Get Posts
   const getPosts = () => {
-    axios.get(`${apiUrl}/posts`).then((resp) => {
+    let url = `${apiUrl}/posts`
+
+    if (filter !== "all") {
+      url += `?tag=${filter}`;
+    }
+
+    axios.get(url).then((resp) => {
       setPostsList(resp.data)
+    })
+  }
+
+  // Get Tags
+  const getTags = () => {
+    axios.get(`${apiUrl}/tags`).then((resp) => {
+      setTagsList(resp.data.tags)
     })
   }
 
@@ -92,26 +111,30 @@ function App() {
         {/* Form */}
         <section className="pt-4">
           <h3>Add Post</h3>
-          <AppForm 
-          submitHandler={handleSubmit}
-          data={formData}
-          inputChangeHandler={handleChange}
-          availableTags={availableTags}
-          selectedChecks={selectedChecks}
-          multipleCheckboxHandler={handleMultipleCheckbox}
+          <AppForm
+            submitHandler={handleSubmit}
+            data={formData}
+            inputChangeHandler={handleChange}
+            availableTags={tagsList}
+            selectedChecks={selectedChecks}
+            multipleCheckboxHandler={handleMultipleCheckbox}
           />
         </section >
 
         {/* Posts */}
         <section className='mt-5' >
           <h3 className='pb-3'>My Posts</h3>
+          <select onChange={(event) => setFilter(event.target.value)} value={filter} name="filter" id="filter" className='form-select w-25 mb-4'>
+            <option value="all">All Posts</option>
+            {tagsList.map((curTag, index) => <option key={index} value={curTag}>{curTag}</option>)}
+          </select>
           <div className="row">
             {postsList.length !== 0 ? postsList.map((curPost, index) =>
               <div key={index} className="col-4 mb-3">
-                <AppPost 
-                url={apiUrl}
-                post={curPost}
-                deleteHandler={handleDelete}
+                <AppPost
+                  url={apiUrl}
+                  post={curPost}
+                  deleteHandler={handleDelete}
                 />
               </div>) : <p>Nessun Post Disponibile</p>}
           </div>
